@@ -61,8 +61,8 @@ for i=1:nt                                                                  % lo
         x_out(1:length(ESR_x),k) = (ESR_x);
     end
 
-    sNAT = std(NAT./max(ESR_out)); NAT=mean(NAT./max(ESR_out));
-    ESR_out = ESR_out./max(ESR_out);                                        % normalises dose response data by max dose
+    NAT = mean(NAT./max(ESR_out)); 
+    if length(NAT)>1; sNAT = std(NAT./max(ESR_out)); else; sNAT = NAT.*0.05; end
 
     ok = isfinite(x_out);
     x = x_out(ok); y = ESR_out(ok);
@@ -87,7 +87,7 @@ for i=1:nt                                                                  % lo
 
         %%% Extract De [s] from dose response curve
         if NAT <= max(Ypred)
-            De_interp = (interp1(Ypred,modvec,[NAT NAT+sNAT NAT+sNAT], 'linear'));
+            De_interp = (interp1(Ypred,modvec,[NAT NAT+sNAT NAT-sNAT], 'linear'));
             sDe_interp = ((De_interp(2)-De_interp(1))+(De_interp(1)-De_interp(3)))/2;
         else
             De_interp = NaN;

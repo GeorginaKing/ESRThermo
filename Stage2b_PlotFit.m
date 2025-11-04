@@ -69,7 +69,7 @@ for i=1:nt
     subplot(1,2,1);
     xlabel('Dose (Gy)'); ylabel('ESR intensity (a.u.)');
     axis square; box on; hold on;
-    xlim([0 15000]);
+    xlim([0 round(max(t)+1000,-3)]);
     if SAR_fittype==1 || SAR_fittype==2
         ylim([0 1.1]);
     end
@@ -88,7 +88,7 @@ for i=1:nt
 
 
     %%% Add text to figure
-    text((15000-1000),1.05,'A','fontweight','bold');
+    text(round(max(t)+1000,-3)-1000,1.05,'A','fontweight','bold');
     text((0+500),1.05,SAR_MODEL,'fontweight','bold');                       % dose response curve model
 
 
@@ -139,14 +139,14 @@ for i=1:nt
 
     %%% Save plots %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     subplot(1,2,1);
-    text((15000-6000),0.10,filename,'fontweight','bold');                   % sample name
+    text((round(max(t)+1000)-4000),0.10,filename,'fontweight','bold');      % sample name
     TypeMeasurement(i) = records(i).typeMeasurement;                        % type of measured signal (ESR, OSL, etc.)
     TypeSignal(i) = records(i).typeSignal;                                  % type of signal measured (Al-center, Ti-center, etc.)
-    text((15000-6000),0.05,[cell2mat(TypeMeasurement(i)) ' ' cell2mat(TypeSignal(i))],'fontweight','bold'); % signal measured
+    text((round(max(t)+1000)-4000),0.05,[cell2mat(TypeMeasurement(i)) ' ' cell2mat(TypeSignal(i))],'fontweight','bold'); % signal measured
 
-    print('-dpng',['./Figures/' filename '_' records(i).id '_' SAR_MODEL '_' ITH_MODEL '.png']);
-    % print('-dsvg',['./Figures/' filename '_' records(i).id '_' SAR_MODEL '_' ITH_MODEL '.svg']);
-    % print('-depsc',['./Figures/' filename '_' records(i).id '_' SAR_MODEL '_' ITH_MODEL '.eps']);
+    print('-dpng',['./Figures/' filename '_' char(TypeMeasurement(i)) '-' char(TypeSignal(i)) '_' SAR_MODEL '_' ITH_MODEL '.png']);
+    % print('-dsvg',['./Figures/' filename '_' char(TypeMeasurement(i)) '-' char(TypeSignal(i)) '_' SAR_MODEL '_' ITH_MODEL '.svg']);
+    % print('-depsc',['./Figures/' filename '_' char(TypeMeasurement(i)) '-' char(TypeSignal(i)) '_' SAR_MODEL '_' ITH_MODEL '.eps']);
 
 end
 
