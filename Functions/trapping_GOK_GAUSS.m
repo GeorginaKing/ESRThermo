@@ -16,7 +16,7 @@ magic_ratio = ddot/D0;
 nstep = length(time);
 dt = ((max(time)-min(time))/(nstep-1))*Ma;
 
-%%% Create variables for GAUSS model Lambert et al (Submitted)
+%%% Create variables for GAUSS model Lambert et al. (Submitted)
 Ea=(5/nstep):(5/nstep):5';
 nEa=length(Ea);
 pEa = exp(-0.5*((Ea-Et)./sigmaEt).^2)/(sigmaEt*sqrt(2*pi));
@@ -27,12 +27,11 @@ T = (temp+273.15)';
 nN = zeros(nEa,nstep);
 nNf = zeros(1,nstep);
 for j=2:nstep
-    inv_tauth = s*exp(-Ea./(kb.*T(j-1)))*ones(1,nEa);
+    inv_tauth = s*exp(-(Ea')./(kb.*T(j-1)))*ones(1,nEa);
     xkd=-a*magic_ratio*(1-nN(:,j-1)).^(a-1)-inv_tauth;
     xk=magic_ratio*(1-nN(:,j-1)).^a-inv_tauth.*(nN(:,j-1));
     nN(:,j) = nN(:,j-1)+dt*xk(:,j-1)./(1-dt*xkd(:,j-1));
-    nNf(j) = pEa'*nN(:,j);
-
+    nNf(j) = pEa*nN(:,j);
 end
 
 nNf = nNf./npEa;
